@@ -5,11 +5,11 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("cloc")]
+[assembly: AssemblyTitle("Tkachev.Nsudotnet.LinesCounter")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Microsoft")]
-[assembly: AssemblyProduct("cloc")]
+[assembly: AssemblyProduct("Tkachev.Nsudotnet.LinesCounter")]
 [assembly: AssemblyCopyright("Copyright © Microsoft 2016")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
@@ -20,7 +20,7 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
-[assembly: Guid("cc6c287a-66b7-4bc6-bfb5-fb94229e74f8")]
+[assembly: Guid("70f7a499-80e9-44e9-9838-b40a4bd81ba1")]
 
 // Version information for an assembly consists of the following four values:
 //

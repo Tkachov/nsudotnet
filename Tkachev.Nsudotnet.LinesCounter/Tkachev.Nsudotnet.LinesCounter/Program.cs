@@ -1,8 +1,8 @@
 ﻿using System;
 using System.IO;
 
-namespace cloc {
-	class Program {		
+namespace Tkachev.Nsudotnet.LinesCounter {
+	class Program {
 		private static int count_file_lines(string filename) {
 			int loc = 0;
 			bool block_comment = false;
@@ -13,7 +13,7 @@ namespace cloc {
 				line = line.Trim();
 				char previous = '\0';
 				int non_whitespace_chars_count = 0;
-				for(int i=0; i<line.Length; ++i) {
+				for(int i = 0; i<line.Length; ++i) {
 					switch(line[i]) {
 						case '/':
 							if(previous == '/' && !block_comment) { //line comment
@@ -25,8 +25,8 @@ namespace cloc {
 								block_comment = false;
 								previous = '\0'; //for "*//*" case
 								continue;
-							}						
-						break;
+							}
+							break;
 
 						case '*':
 							if(!block_comment && previous == '/') {
@@ -34,16 +34,18 @@ namespace cloc {
 								previous = '\0'; //for "/*/" case
 								continue;
 							}
-						break;
+							break;
 
 						default:
-							if(!block_comment && !string.IsNullOrWhiteSpace(line[i]+"")) ++non_whitespace_chars_count;
-						break;
+							if(!block_comment && !string.IsNullOrWhiteSpace(line[i]+""))
+								++non_whitespace_chars_count;
+							break;
 					}
 					previous = line[i];
 				}
 
-				if(non_whitespace_chars_count > 0) ++loc;
+				if(non_whitespace_chars_count > 0)
+					++loc;
 			}
 
 			return loc;
@@ -92,7 +94,8 @@ namespace cloc {
 				filemask = mask.Substring(index+1);
 			}
 
-			if(path == "") path = Directory.GetCurrentDirectory();
+			if(path == "")
+				path = Directory.GetCurrentDirectory();
 
 			string[] files = Directory.GetFiles(path, filemask, SearchOption.AllDirectories);
 			int total = 0;
