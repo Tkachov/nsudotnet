@@ -1,0 +1,61 @@
+Example (line 1)
+
+line 2
+line 3 //comment
+//comment
+
+line 4
+
+/* comment */
+
+line 5
+
+
+line 6
+line 7
+lin/*e*/ 8
+
+/*
+a
+b
+c
+d
+e
+f
+*/
+
+line 9
+
+line 10 /*
+
+a
+b
+c
+d
+e
+/*
+
+f
+
+*/
+
+line 11
+
+line 12/*
+12
+12
+12*/line 13/*
+13
+13
+*//*
+13
+13
+13 //
+*/* not a comment here 14
+
+line 15/**//*/*/line 15 continues/*
+15*//*15*//**/    /*15*//*
+*/16/*
+16
+16*/17//
+line 18
