@@ -1,31 +1,21 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Tkachev.Nsudotnet.TicTacToe {
+﻿namespace Tkachev.Nsudotnet.TicTacToe {
 	class Field {
-		private const int ROWS = 3;
-		private const int COLS = 3;
-		private const int N_IN_ROW_TO_WIN = 3;
-
-		private CellType[] cells = new CellType[ROWS*COLS];
+		private CellType[] cells = new CellType[Game.ROWS*Game.COLS];
 		private CellType winner = CellType.EMPTY;
 
 		public Field() {
-			for(int i = 0; i<ROWS*COLS; ++i)
+			for(int i = 0; i<Game.ROWS*Game.COLS; ++i)
 				cells[i] = CellType.EMPTY;
 		}
 
 		//getters		
 
-		public CellType getCell(int index) { return cells[(index%(ROWS*COLS))];  }
+		public CellType getCell(int index) { return cells[(index%(Game.ROWS*Game.COLS))];  }
 
-		public CellType getCellByPosition(int row, int col) { return cells[(row%ROWS)*COLS + (col%COLS)];  }
+		public CellType getCellByPosition(int row, int col) { return cells[(row%Game.ROWS)*Game.COLS + (col%Game.COLS)];  }
 
 		public bool isFull() {
-			for(int i = 0; i<ROWS*COLS; ++i)
+			for(int i = 0; i<Game.ROWS*Game.COLS; ++i)
 				if(cells[i] == CellType.EMPTY)
 					return false;
 			return true;
@@ -38,12 +28,12 @@ namespace Tkachev.Nsudotnet.TicTacToe {
 		//setters
 
 		public void setCell(int index, CellType value) {
-			cells[(index%(ROWS*COLS))] = value;
+			cells[(index%(Game.ROWS*Game.COLS))] = value;
 			checkWin();
 		}
 
 		public void setCellByPosition(int row, int col, CellType value) {
-			cells[(row%ROWS)*COLS + (col%COLS)] = value;
+			cells[(row%Game.ROWS)*Game.COLS + (col%Game.COLS)] = value;
 			checkWin();
 		}
 
@@ -61,7 +51,7 @@ namespace Tkachev.Nsudotnet.TicTacToe {
 
 				CellType potentinalWinner = CellType.EMPTY;
 				int inRow = 0;
-				while(row>=0 && row<ROWS && col>=0 && col<COLS) {
+				while(row>=0 && row<Game.ROWS && col>=0 && col<Game.COLS) {
 					CellType cell = field.getCellByPosition(row, col);
 					if(potentinalWinner != cell) {
 						potentinalWinner = cell;
@@ -69,7 +59,7 @@ namespace Tkachev.Nsudotnet.TicTacToe {
 					} else
 						++inRow;
 
-					if(inRow >= N_IN_ROW_TO_WIN && potentinalWinner != CellType.EMPTY) {
+					if(inRow >= Game.N_IN_ROW_TO_WIN && potentinalWinner != CellType.EMPTY) {
 						return potentinalWinner;
 					}
 
@@ -86,7 +76,7 @@ namespace Tkachev.Nsudotnet.TicTacToe {
 		public static CellType findWinner(Field field) {
 			//check cols
 			CellType result = findWinnerMoving(
-				field, ROWS,
+				field, Game.ROWS,
 				(int iteration, ref int row, ref int col) => {
 					row=iteration;
 					col=0;
@@ -100,7 +90,7 @@ namespace Tkachev.Nsudotnet.TicTacToe {
 
 			//check rows
 			result = findWinnerMoving(
-				field, COLS,
+				field, Game.COLS,
 				(int iteration, ref int row, ref int col) => {
 					col=iteration;
 					row=0;
@@ -114,13 +104,13 @@ namespace Tkachev.Nsudotnet.TicTacToe {
 
 			//check diagonals
 			result = findWinnerMoving(
-				field, ROWS+COLS-1,
+				field, Game.ROWS+Game.COLS-1,
 				(int iteration, ref int row, ref int col) => {
 					row=iteration;
 					col=0;
-					if(iteration >= ROWS) {
-						row = ROWS-1;
-						col = iteration-ROWS+1;
+					if(iteration >= Game.ROWS) {
+						row = Game.ROWS-1;
+						col = iteration-Game.ROWS+1;
 					}
 				},
 				(ref int row, ref int col) => {
@@ -132,13 +122,13 @@ namespace Tkachev.Nsudotnet.TicTacToe {
 				return result;
 
 			result = findWinnerMoving(
-				field, ROWS+COLS-1,
+				field, Game.ROWS+Game.COLS-1,
 				(int iteration, ref int row, ref int col) => {
 					col=iteration;
 					row=0;
-					if(iteration >= COLS) {
+					if(iteration >= Game.COLS) {
 						col = 0;
-						row = iteration-COLS+1;
+						row = iteration-Game.COLS+1;
 					}
 				},
 				(ref int row, ref int col) => {
