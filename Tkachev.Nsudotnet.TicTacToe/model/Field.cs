@@ -1,50 +1,45 @@
-﻿namespace Tkachev.Nsudotnet.TicTacToe {
+﻿namespace Tkachev.Nsudotnet.TicTacToe.model {
 	class Field {
-		private CellType[] cells = new CellType[Game.ROWS*Game.COLS];
-		private CellType winner = CellType.EMPTY;
+		private readonly CellType[] _cells = new CellType[Game.ROWS*Game.COLS];
 
 		public Field() {
 			for(int i = 0; i<Game.ROWS*Game.COLS; ++i)
-				cells[i] = CellType.EMPTY;
+				_cells[i] = CellType.EMPTY;
 		}
 
-		//getters		
+		public CellType this[int i] {
+			get { return _cells[(i%(Game.ROWS*Game.COLS))]; }
+			set {
+				_cells[(i%(Game.ROWS*Game.COLS))] = value;
+				CheckWin();
+			}
+		}
 
-		public CellType getCell(int index) { return cells[(index%(Game.ROWS*Game.COLS))];  }
+		public CellType this[int row, int col] {
+			get { return _cells[(row%Game.ROWS)*Game.COLS + (col%Game.COLS)]; }
+			set {
+				_cells[(row%Game.ROWS)*Game.COLS + (col%Game.COLS)] = value;
+				CheckWin();
+			}
+		}
 
-		public CellType getCellByPosition(int row, int col) { return cells[(row%Game.ROWS)*Game.COLS + (col%Game.COLS)];  }
-
-		public bool isFull() {
+		public bool IsFull() {
 			for(int i = 0; i<Game.ROWS*Game.COLS; ++i)
-				if(cells[i] == CellType.EMPTY)
+				if(_cells[i] == CellType.EMPTY)
 					return false;
 			return true;
 		}
 
-		public CellType getWinner() {
-			return winner;
-		}
+		public CellType Winner { get; private set; } = CellType.EMPTY;
 
-		//setters
-
-		public void setCell(int index, CellType value) {
-			cells[(index%(Game.ROWS*Game.COLS))] = value;
-			checkWin();
-		}
-
-		public void setCellByPosition(int row, int col, CellType value) {
-			cells[(row%Game.ROWS)*Game.COLS + (col%Game.COLS)] = value;
-			checkWin();
-		}
-
-		private void checkWin() {
-			if(winner != CellType.EMPTY)
+		private void CheckWin() {
+			if(Winner != CellType.EMPTY)
 				return; //someone already won there
 
-			winner = findWinner(this);
+			Winner = FindWinner(this);
 		}
 
-		private static CellType findWinnerMoving(Field field, int iterations, initIteration init, move mv) {
+		private static CellType FindWinnerMoving(Field field, int iterations, InitIteration init, Move mv) {
 			for(int iteration = 0; iteration<iterations; ++iteration) {
 				int row = 0, col = 0;
 				init(iteration, ref row, ref col);
@@ -52,7 +47,7 @@
 				CellType potentinalWinner = CellType.EMPTY;
 				int inRow = 0;
 				while(row>=0 && row<Game.ROWS && col>=0 && col<Game.COLS) {
-					CellType cell = field.getCellByPosition(row, col);
+					CellType cell = field[row, col];
 					if(potentinalWinner != cell) {
 						potentinalWinner = cell;
 						inRow = 1;
@@ -70,12 +65,12 @@
 			return CellType.EMPTY;
 		}
 
-		private delegate void initIteration(int iteration, ref int row, ref int col);
-		private delegate void move(ref int row, ref int col);
+		private delegate void InitIteration(int iteration, ref int row, ref int col);
+		private delegate void Move(ref int row, ref int col);
 
-		public static CellType findWinner(Field field) {
+		public static CellType FindWinner(Field field) {
 			//check cols
-			CellType result = findWinnerMoving(
+			CellType result = FindWinnerMoving(
 				field, Game.ROWS,
 				(int iteration, ref int row, ref int col) => {
 					row=iteration;
@@ -89,7 +84,7 @@
 				return result;
 
 			//check rows
-			result = findWinnerMoving(
+			result = FindWinnerMoving(
 				field, Game.COLS,
 				(int iteration, ref int row, ref int col) => {
 					col=iteration;
@@ -103,7 +98,7 @@
 				return result;
 
 			//check diagonals
-			result = findWinnerMoving(
+			result = FindWinnerMoving(
 				field, Game.ROWS+Game.COLS-1,
 				(int iteration, ref int row, ref int col) => {
 					row=iteration;
@@ -121,7 +116,7 @@
 			if(result != CellType.EMPTY)
 				return result;
 
-			result = findWinnerMoving(
+			result = FindWinnerMoving(
 				field, Game.ROWS+Game.COLS-1,
 				(int iteration, ref int row, ref int col) => {
 					col=iteration;

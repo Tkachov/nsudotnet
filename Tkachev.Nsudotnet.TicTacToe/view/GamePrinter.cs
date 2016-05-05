@@ -1,9 +1,10 @@
 ﻿using System;
 using System.Text;
+using Tkachev.Nsudotnet.TicTacToe.model;
 
 namespace Tkachev.Nsudotnet.TicTacToe.view {
 	class GamePrinter {
-		public void print(ref Game game) {
+		public void Print(Game game) {
 			/*
 			+---+---+---+     Total result:
 			|   |   |   |     +---+
@@ -23,12 +24,10 @@ namespace Tkachev.Nsudotnet.TicTacToe.view {
 			//you'd probably want me dead for this
 			//but that's all for the art and UI
 
-			StringBuilder separator = new StringBuilder("+");
-			StringBuilder cellSeparator = new StringBuilder("");
-			cellSeparator.Append(new String('-', Game.COLS));
-			cellSeparator.Append("+");
+			String separator = "+";
+			String cellSeparator = new String('-', Game.COLS) + '+';
 			for(int i = 0; i<Game.COLS; ++i)
-				separator.Append(cellSeparator);
+				separator += cellSeparator;
 
 			String smallSeparator = '+' + new String('-', Game.COLS) + '+';
 
@@ -39,7 +38,7 @@ namespace Tkachev.Nsudotnet.TicTacToe.view {
 			for(int i = 0; i<Game.ROWS; ++i) {
 				fieldLines[fieldLinesIndex++] = separator.ToString();
 				for(int j = 0; j<Game.ROWS; ++j) {
-					fieldLines[fieldLinesIndex++] = getLine(ref game, i, j);
+					fieldLines[fieldLinesIndex++] = GetLine(game, i, j);
 				}
 			}
 			fieldLines[fieldLinesIndex++] = separator.ToString();
@@ -48,19 +47,19 @@ namespace Tkachev.Nsudotnet.TicTacToe.view {
 			infoLines[infoLinesIndex++] = "Total result:";
 			infoLines[infoLinesIndex++] = smallSeparator;
 			for(int j = 0; j<Game.ROWS; ++j) {
-				infoLines[infoLinesIndex++] = getSmallLine(ref game, j);
+				infoLines[infoLinesIndex++] = GetSmallLine(game, j);
 			}
 			infoLines[infoLinesIndex++] = smallSeparator;
 			infoLines[infoLinesIndex++] = "";
 
-			int fieldIndex = game.getCurrentField();
+			int fieldIndex = game.CurrentField;
 			if(fieldIndex != Game.CAN_MAKE_MOVE_AT_ANY_CELL) {
 				infoLines[infoLinesIndex++] = "Current field:";
 				infoLines[infoLinesIndex++] = smallSeparator;
 				int fieldRow = fieldIndex/Game.COLS;
 				int fieldCol = fieldIndex%Game.COLS;
 				for(int j = 0; j<Game.ROWS; ++j) {
-					infoLines[infoLinesIndex++] = getSmallLineOfField(ref game, fieldRow, fieldCol, j);
+					infoLines[infoLinesIndex++] = GetSmallLineOfField(game, fieldRow, fieldCol, j);
 				}
 				infoLines[infoLinesIndex++] = smallSeparator;
 			} else {
@@ -84,7 +83,7 @@ namespace Tkachev.Nsudotnet.TicTacToe.view {
 			}
 		}
 
-		private char printingChar(CellType type) {
+		private char PrintingChar(CellType type) {
 			switch(type) {
 				case CellType.EMPTY:
 					return ' ';
@@ -96,28 +95,28 @@ namespace Tkachev.Nsudotnet.TicTacToe.view {
 			return '-';
 		}
 
-		private String getLine(ref Game game, int row, int innerRow) {
+		private String GetLine(Game game, int row, int innerRow) {
 			StringBuilder line = new StringBuilder("|");
 			for(int col = 0; col<Game.COLS; ++col) {
 				for(int innerCol = 0; innerCol<Game.COLS; ++innerCol)
-					line.Append(printingChar(game.getFieldByPosition(row, col).getCellByPosition(innerRow, innerCol)));
+					line.Append(PrintingChar(game[row, col][innerRow, innerCol]));
 				line.Append('|');
 			}
 			return line.ToString();
 		}
 
-		private String getSmallLine(ref Game game, int row) {
+		private String GetSmallLine(Game game, int row) {
 			StringBuilder line = new StringBuilder("|");			
 			for(int innerCol = 0; innerCol<Game.COLS; ++innerCol)
-				line.Append(printingChar(game.getFieldByPosition(row, innerCol).getWinner()));
+				line.Append(PrintingChar(game[row, innerCol].Winner));
 			line.Append('|');			
 			return line.ToString();
 		}
 
-		private String getSmallLineOfField(ref Game game, int row, int col, int innerRow) {
+		private String GetSmallLineOfField(Game game, int row, int col, int innerRow) {
 			StringBuilder line = new StringBuilder("|");
 			for(int innerCol = 0; innerCol<Game.COLS; ++innerCol)
-				line.Append(printingChar(game.getFieldByPosition(row, col).getCellByPosition(innerRow, innerCol)));
+				line.Append(PrintingChar(game[row, col][innerRow, innerCol]));
 			line.Append('|');
 			return line.ToString();
 		}

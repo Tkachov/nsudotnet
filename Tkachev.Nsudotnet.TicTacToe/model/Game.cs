@@ -1,53 +1,53 @@
-﻿namespace Tkachev.Nsudotnet.TicTacToe {
+﻿namespace Tkachev.Nsudotnet.TicTacToe.model {
 	class Game {
 		public const int ROWS = 3;
 		public const int COLS = 3;
 		public const int N_IN_ROW_TO_WIN = 3;
 		public const int CAN_MAKE_MOVE_AT_ANY_CELL = -1;
 
-		private Field[] fields = new Field[ROWS*COLS];
-		private Field bigCellsResults = new Field();
+		private readonly Field[] _fields = new Field[ROWS*COLS];
+		private readonly Field _bigCellsResults = new Field();
 
-		private bool X_move = true;
-		private int lastMoveIndex = CAN_MAKE_MOVE_AT_ANY_CELL;
-		private CellType winner = CellType.EMPTY;
+		private int _lastMoveIndex = CAN_MAKE_MOVE_AT_ANY_CELL;
 
 		public Game() {
 			for(int i = 0; i<ROWS*COLS; ++i)
-				fields[i] = new Field();
+				_fields[i] = new Field();
 		}
 
-		//getters
+		//getters		
 
-		public Field getField(int index) { return fields[index]; }
+		public Field this[int i] => _fields[i];
 
-		public Field getFieldByPosition(int row, int col) { return fields[(row%ROWS)*COLS + (col%COLS)]; }
+		public Field this[int row, int col] => _fields[(row%ROWS)*COLS + (col%COLS)];
 
-		public CellType getWinner() { return winner; }
+		public CellType Winner { get; private set; } = CellType.EMPTY;
 
-		public bool xMove() { return X_move;  }
+		public bool XMove { get; private set; } = true;
 
-		public int getCurrentField() {
-			if(lastMoveIndex != CAN_MAKE_MOVE_AT_ANY_CELL) {
-				if(fields[lastMoveIndex].isFull())
-					lastMoveIndex = CAN_MAKE_MOVE_AT_ANY_CELL;
+		public int CurrentField {
+			get {
+				if(_lastMoveIndex != CAN_MAKE_MOVE_AT_ANY_CELL) {
+					if(_fields[_lastMoveIndex].IsFull())
+						_lastMoveIndex = CAN_MAKE_MOVE_AT_ANY_CELL;
+				}
+
+				return _lastMoveIndex;
 			}
-
-			return lastMoveIndex;
 		}
 
 		//state changers
 
-		public void makeAMove(int fieldIndex, int cellIndex) {
-			fields[fieldIndex].setCell(cellIndex, (X_move ? CellType.X_MOVE : CellType.O_MOVE));
-			bigCellsResults.setCell(fieldIndex, fields[fieldIndex].getWinner());
-			lastMoveIndex = cellIndex;
-			checkWins();
-			X_move = !X_move;
+		public void MakeAMove(int fieldIndex, int cellIndex) {
+			_fields[fieldIndex][cellIndex] = (XMove ? CellType.X_MOVE : CellType.O_MOVE);
+			_bigCellsResults[fieldIndex] = _fields[fieldIndex].Winner;
+			_lastMoveIndex = cellIndex;
+			CheckWins();
+			XMove = !XMove;
 		}
 
-		private void checkWins() {
-			winner = bigCellsResults.getWinner();			
+		private void CheckWins() {
+			Winner = _bigCellsResults.Winner;			
 		}
 	}
 }

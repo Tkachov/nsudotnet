@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Tkachev.Nsudotnet.TicTacToe {
+﻿namespace Tkachev.Nsudotnet.TicTacToe.model {
 	enum CellType {
 		EMPTY,
 		X_MOVE,
