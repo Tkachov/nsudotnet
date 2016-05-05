@@ -3,48 +3,48 @@ using System.IO;
 
 namespace Tkachev.Nsudotnet.LinesCounter {
 	class Program {
-		private static int count_file_lines(string filename) {
+		private static int CountFileLines(string filename) {
 			int loc = 0;
-			bool block_comment = false;
+			bool blockComment = false;
 
 			StreamReader reader = File.OpenText(filename);
 			string line;
 			while((line = reader.ReadLine()) != null) {
 				line = line.Trim();
 				char previous = '\0';
-				int non_whitespace_chars_count = 0;
+				int nonWhitespaceCharsCount = 0;
 				for(int i = 0; i<line.Length; ++i) {
 					switch(line[i]) {
 						case '/':
-							if(previous == '/' && !block_comment) { //line comment
+							if(previous == '/' && !blockComment) { //line comment
 								i = line.Length-1;
 								break;
 							}
 
-							if(block_comment && previous == '*') {
-								block_comment = false;
+							if(blockComment && previous == '*') {
+								blockComment = false;
 								previous = '\0'; //for "*//*" case
 								continue;
 							}
 							break;
 
 						case '*':
-							if(!block_comment && previous == '/') {
-								block_comment = true;
+							if(!blockComment && previous == '/') {
+								blockComment = true;
 								previous = '\0'; //for "/*/" case
 								continue;
 							}
 							break;
 
 						default:
-							if(!block_comment && !string.IsNullOrWhiteSpace(line[i]+""))
-								++non_whitespace_chars_count;
+							if(!blockComment && !char.IsWhiteSpace(line[i]))
+								++nonWhitespaceCharsCount;
 							break;
 					}
 					previous = line[i];
 				}
 
-				if(non_whitespace_chars_count > 0)
+				if(nonWhitespaceCharsCount > 0)
 					++loc;
 			}
 
@@ -100,7 +100,7 @@ namespace Tkachev.Nsudotnet.LinesCounter {
 			string[] files = Directory.GetFiles(path, filemask, SearchOption.AllDirectories);
 			int total = 0;
 			foreach(string filename in files) {
-				int loc = count_file_lines(filename);
+				int loc = CountFileLines(filename);
 				if(verbose)
 					Console.WriteLine(loc + " lines in " + filename);
 				total += loc;
