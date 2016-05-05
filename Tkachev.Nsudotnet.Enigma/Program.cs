@@ -4,7 +4,7 @@ using System.Security.Cryptography;
 
 namespace Tkachev.Nsudotnet.Enigma {
 	class Program {
-		private static bool invalidUsage(string[] args, Dictionary<String, SymmetricAlgorithm> factoryForPoor) {
+		private static bool InvalidUsage(string[] args, Dictionary<String, SymmetricAlgorithm> simpleFactory) {
 			if(args.Length < 3) {
 				Console.WriteLine("Not enough arguments.");
 				return true;
@@ -25,7 +25,7 @@ namespace Tkachev.Nsudotnet.Enigma {
 				return true;
 			}
 
-			if(!factoryForPoor.ContainsKey(args[2])) {
+			if(!simpleFactory.ContainsKey(args[2])) {
 				Console.WriteLine("Unknown algorithm passed.");
 				return true;
 			}
@@ -34,13 +34,13 @@ namespace Tkachev.Nsudotnet.Enigma {
 		}
 
 		static void Main(string[] args) {			
-			Dictionary<String, SymmetricAlgorithm> factoryForPoor = new Dictionary<String, SymmetricAlgorithm>();
-			factoryForPoor.Add("aes", new AesManaged());
-			factoryForPoor.Add("des", new DESCryptoServiceProvider());
-			factoryForPoor.Add("rc2", new RC2CryptoServiceProvider());
-			factoryForPoor.Add("rijndael", new RijndaelManaged());
+			Dictionary<String, SymmetricAlgorithm> simpleFactory = new Dictionary<String, SymmetricAlgorithm>();
+			simpleFactory.Add("aes", new AesManaged());
+			simpleFactory.Add("des", new DESCryptoServiceProvider());
+			simpleFactory.Add("rc2", new RC2CryptoServiceProvider());
+			simpleFactory.Add("rijndael", new RijndaelManaged());
 
-			if(invalidUsage(args, factoryForPoor)) { //prints why usage is invalid
+			if(InvalidUsage(args, simpleFactory)) { //prints why usage is invalid
 				Console.WriteLine();
 				Console.WriteLine("Usage:");
 				Console.WriteLine("\tenigma encrypt <input file> <algorithm> <output file>");
@@ -48,8 +48,8 @@ namespace Tkachev.Nsudotnet.Enigma {
 				return;
 			}
 
-			if(args[0] == "encrypt") Crypto.encrypt(factoryForPoor[args[2]], args[1], args[3]);
-			else Crypto.decrypt(factoryForPoor[args[2]], args[1], args[3], args[4]);
+			if(args[0] == "encrypt") Crypto.Encrypt(simpleFactory[args[2]], args[1], args[3]);
+			else Crypto.Decrypt(simpleFactory[args[2]], args[1], args[3], args[4]);
 		}
 	}
 }
